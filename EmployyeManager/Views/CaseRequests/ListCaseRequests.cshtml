@@ -1,0 +1,100 @@
+﻿
+@model IEnumerable<EmployyeManager.Models.CaseViewModel>
+
+@{
+    ViewBag.Title = "ListCaseRequests";   
+}
+
+<style>
+    body {
+        background-color: #d5f5e3;
+    }
+
+    .table-container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px #888888;
+    }
+
+        .table-container h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 2px solid #d5f5e3;
+            padding-bottom: 10px;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    th {
+        background-color: #1abc9c;
+        color: white;
+        font-weight: bold;
+    }
+
+    .accept-link {
+        color: #1abc9c;
+        text-decoration: none;
+    }
+
+        .accept-link:hover {
+            color: #16a085;
+            text-decoration: underline;
+        }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 table-container">
+            <h2>List of Leave Requests</h2>
+            <table>
+                <tr>
+                    <th>Case ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Case Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Action</th>
+                </tr>
+                @foreach (var request in Model)
+                {
+                    <tr>
+                        <td>@request.CaseID</td>
+                        <td>@request.FirstName</td>
+                        <td>@request.LastName</td>
+                        <td>@request.CaseType</td>
+                        <td>@request.StartDate.ToShortDateString()</td>
+                        <td>@request.EndDate.ToShortDateString()</td>
+                        <td>
+                            @using (Html.BeginForm("AcceptRequest", "CaseRequests"))
+                            {
+                                @Html.Hidden("caseId", request.CaseID)
+                                <a class="accept-link" href="@Url.Action("AcceptRequest", "CaseRequests", new { id = request.CaseID })">Accept</a>
+                            }
+
+                            @using (Html.BeginForm("RejectRequest", "CaseRequests"))
+                            {
+                                @Html.Hidden("caseId", request.CaseID)
+                                <a class="accept-link" href="@Url.Action("RejectRequest", "CaseRequests", new { id = request.CaseID })">Reject</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+            </div>
+        </div>
+</div>

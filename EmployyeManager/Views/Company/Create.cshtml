@@ -1,0 +1,134 @@
+﻿@model EmployyeManager.Models.CompanyInputModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    body {
+        background-color: #d5f5e3;
+    }
+
+    .login-panel {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px #888888;
+        margin: 50px auto;
+        max-width: 600px;
+    }
+
+        .login-panel h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 2px solid #d5f5e3;
+            padding-bottom: 10px;
+        }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 0;
+        border-color: #d5f5e3;
+        box-shadow: none;
+    }
+
+    .btn-primary {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+
+        .btn-primary:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+    .btn-cancel {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px 20px;
+        color: white;
+    }
+
+        .btn-cancel:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 login-panel">
+            <h2>Create your own Company</h2>
+            @using (Html.BeginForm("Create", "Company", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CompanyName)
+                    @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CompanyName)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.WorkerAmount)
+                    @Html.TextBoxFor(model => model.WorkerAmount, new { @class = "form-control", @readonly = "readonly", id = "workerAmount" })
+                    @Html.ValidationMessageFor(model => model.WorkerAmount)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SubscriptionType)
+                    @Html.DropDownListFor(model => model.SubscriptionType, ViewBag.SubscriptionTypes as SelectList, "Please select a subscription type", new { @class = "form-control", id = "subscriptionType" })
+                    @Html.ValidationMessageFor(model => model.SubscriptionType)
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="text" class="form-control" readonly="readonly" id="price">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create</button>
+                @Html.ActionLink("Cancel", "MainPanel", "Home", null, new { @class = "btn btn-cancel" })
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Update WorkerAmount based on selected SubscriptionType
+        $(document).ready(function () {
+            $("#subscriptionType").change(function () {
+                var subscriptionType = $(this).val();
+                var workerAmount = 0;
+                var price = 0;
+                // Update workerAmount based on selected subscriptionType
+                switch (subscriptionType) {
+                    case "1": // SubscriptionType 1
+                        workerAmount = 10;
+                        price = workerAmount * 3;
+                        break;
+                    case "2": // SubscriptionType 2
+                        workerAmount = 25;
+                        price = workerAmount * 3;
+                        break;
+                    case "3": // SubscriptionType 3
+                        workerAmount = 100;
+                        price = workerAmount * 3;
+                        break;                   
+                }
+
+                $("#workerAmount").val(workerAmount);
+                $("#price").val(price.toFixed(2));
+            });
+        });
+    </script>
+}

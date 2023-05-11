@@ -1,0 +1,59 @@
+﻿@model EmployyeManager.Models.UserInputModel
+
+@{
+    ViewBag.Title = "View";
+}
+
+<
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create User</title>
+    <style>
+        /* Add your custom styles here */
+    </style>
+</head>
+<body>
+    <h1>Create User</h1>
+    @using (Html.BeginForm("Post", "User", FormMethod.Post, new { @class = "user-form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName)
+            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName)
+            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email)
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password)
+            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+        <input type="submit" value="Create" class="btn btn-primary" />
+    }
+    @if (!ViewBag.IsSuccess)
+    {
+        <div class="alert alert-danger">
+            <strong>Error!</strong> There was an error while creating the user. Please try again.
+        </div>
+    }
+    @if (ViewBag.IsSuccess)
+    {
+        <div class="alert alert-success">
+            <strong>Success!</strong> User created successfully.
+        </div>
+    }
+    <script>
+            // Add your custom scripts here
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+﻿@model EmployyeManager.Models.OnLeaveViewModel
+
+@{
+    ViewBag.Title = "On Leave";
+}
+
+<style>
+    body {
+        background-color: #d5f5e3;
+    }
+
+    .on-leave-panel {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px #888888;
+    }
+
+        .on-leave-panel h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 2px solid #d5f5e3;
+            padding-bottom: 10px;
+        }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th,
+        .table td {
+            border: 1px solid #d5f5e3;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #1abc9c;
+            color: white;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+    .go-back-btn {
+        background-color: #1abc9c; 
+        color: white; 
+        border: none; 
+        border-radius: 5px; 
+        padding: 10px 20px; 
+        text-decoration: none; 
+        font-size: 16px; 
+        transition: background-color 0.3s ease; 
+    }
+
+        .go-back-btn:hover {
+            background-color: #16a085; 
+            color: white;
+        }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 on-leave-panel">
+            <h2>Employees currently on leave</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>                       
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.UsersOnLeave)
+                    {
+                        <tr>                           
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.EmailAdress</td>
+                            <td>@user.StartDate.ToShortDateString()</td>
+                            <td>@user.EndDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <h2>Employees who have returned from leave</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>                        
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.UsersReturnedFromLeave)
+                    {
+                        <tr>                            
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.EmailAdress</td>
+                            <td>@user.StartDate.ToShortDateString()</td>
+                            <td>@user.EndDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="@Url.Action("CompanyDetails", "Company", new { id = Model.CompanyId })" class="btn btn-primary go-back-btn" style="margin-top: 20px;">Go Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

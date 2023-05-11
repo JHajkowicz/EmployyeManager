@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - LeaveEase</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script>src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script>src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <style>
+        body {
+            min-height: 100vh;
+        }
+
+        .navbar-brand {
+            font-size: 28px;
+            color: #fff;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+            .navbar-brand:hover {
+                color: #fff;
+                text-decoration: none;
+            }
+
+        .navbar-inverse {
+            background-color: #1abc9c;
+            border-color: #1abc9c;
+        }
+
+            .navbar-inverse .navbar-nav > li > a {
+                color: #fff;
+            }
+
+                .navbar-inverse .navbar-nav > li > a:hover,
+                .navbar-inverse .navbar-nav > li > a:focus {
+                    color: #fff;
+                    background-color: transparent;
+                }
+
+            .navbar-inverse .navbar-btn {
+                color: #fff;
+            }
+
+                .navbar-inverse .navbar-btn:hover,
+                .navbar-inverse .navbar-btn:focus {
+                    color: #fff;
+                    background-color: transparent;
+                }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+            footer p {
+                font-size: 14px;
+                color: #aaa;
+                margin-bottom: 0;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand">LeaveEase</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["UserId"] != null)
+                    {
+                        <li>
+                            @Html.ActionLink("Logout", "Logout", "User", null, new { @class = "navbar-btn" })
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - LeaveEase</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

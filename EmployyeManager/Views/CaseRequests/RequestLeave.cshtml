@@ -1,0 +1,177 @@
+﻿@model EmployyeManager.Models.CaseRequestViewModel
+
+@{
+    ViewBag.Title = "Case Request";
+}
+
+<style>
+    body {
+        background-color: #d5f5e3;
+    }
+
+    .form-panel, .calendar-panel {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px #888888;
+        margin-bottom: 20px;
+    }
+
+        .form-panel h2, .calendar-panel h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 2px solid #d5f5e3;
+            padding-bottom: 10px;
+        }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 0;
+        border-color: #d5f5e3;
+        box-shadow: none;
+    }
+
+    .btn-primary {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+
+        .btn-primary:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+    /* Calendar styling */
+    .fc-toolbar h2 {
+        font-size: 24px;
+        color: #1abc9c;
+    }
+
+    .fc-button {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+        .fc-button:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+    .fc-today {
+        background-color: #d5f5e3;
+    }
+
+    .fc-event {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 form-panel">
+            <h2>Case Request</h2>
+            @using (Html.BeginForm("Create", "CaseRequests", FormMethod.Post))
+            {
+                @Html.HiddenFor(model => model.CompanyID)
+                @Html.HiddenFor(model => model.UserID)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CaseType, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CaseType, Model.CaseTypes, "-- Select a Case Type --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CaseType)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                        @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 calendar-panel">
+            <h2>Calendar</h2>
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+    @section scripts {
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css" rel="stylesheet" />
+        <script>
+            $(function () {
+                $('.datepicker').datepicker({
+                    dateFormat: 'dd/mm/yy'
+                });
+            });
+        </script>
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css' rel='stylesheet' />
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css' rel='stylesheet' media='print' />
+        <style>
+            .fc-event-blue {
+                background-color: #1abc9c !important;
+            }
+        </style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js'></script>
+        <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay,listMonth'
+                },
+                defaultDate: '@DateTime.Now.ToString("yyyy-MM-dd")',
+                navLinks: true,
+                editable: false,
+                eventLimit: true,
+                events: '@Url.Action("GetLeaveCaseAllocations", "CaseRequests")?id=@Model.CompanyID',
+                dayRender: function (date, cell) {
+                    var today = moment().startOf('day');
+                    var day = moment(date).startOf('day');
+                    var start = moment("@Model.StartDate").startOf('day');
+                    var end = moment("@Model.EndDate").startOf('day');
+                    var events = $('#calendar').fullCalendar('clientEvents');
+
+                    $.each(events, function(index, event) {
+                        var eventStart = moment(event.start);
+                        var eventEnd = moment(event.end || event.start);
+                        if (day.isSameOrAfter(eventStart) && day.isSameOrBefore(eventEnd) && event.className == 'fc-event-blue') {
+                            cell.css('background-color', '#1abc9c');
+                        }
+                    });
+
+                    if (day.isSame(today)) {
+                        cell.addClass("fc-today");
+                    } else if (day.isBetween(start, end, null, [])) {
+                        cell.addClass("fc-weekday");
+                    }
+                }
+            });
+        });
+        </script>
+    }

@@ -1,0 +1,89 @@
+﻿@model List<EmployyeManager.Models.Company>
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    body {
+        background-color: #d5f5e3;
+    }
+
+    .index-container {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px #888888;
+        margin-top: 20px;
+    }
+
+        .index-container h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 2px solid #1abc9c;
+            padding-bottom: 10px;
+        }
+
+    .table {
+        border: 1px solid #1abc9c;
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+        .table th, .table td {
+            border: 1px solid #1abc9c;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #1abc9c;
+            color: white;
+        }
+
+    .btn-info {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+
+        .btn-info:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+    p {
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container index-container">
+    <h2>Company List</h2>
+
+    @if (Model.Count > 0)
+    {
+        <table class="table">
+            <tr>
+                <th>Company Name</th>                             
+                <th>Actions</th>
+            </tr>
+            @foreach (var company in Model)
+            {
+                <tr>
+                    <td>@company.CompanyName</td>                                 
+                    <td>
+                        @Html.ActionLink("Details", "CompanyDetails", new { id = company.CompanyID }, new { @class = "btn btn-info" })
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p>No companies found.</p>
+    }
+</div>

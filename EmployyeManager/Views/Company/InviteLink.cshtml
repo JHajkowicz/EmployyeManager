@@ -1,0 +1,17 @@
+﻿@model EmployyeManager.Models.CompanyEmployee
+
+@{
+    ViewBag.Title = "Invite Link";
+}
+
+<h2>Invite Link</h2>
+
+@if (ViewBag.InviteLink != null)
+{
+    <p>Copy the following link and send it to the employee:</p>
+    <p>@ViewBag.InviteLink</p>
+}
+else
+{
+    <p>Failed to generate invite link.</p>
+}

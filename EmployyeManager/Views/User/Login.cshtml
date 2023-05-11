@@ -1,0 +1,88 @@
+﻿@model EmployyeManager.Models.UserLoginModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<style>
+    body {
+        background-color: #d5f5e3;
+    }
+
+    .login-panel {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px #888888;
+    }
+
+        .login-panel h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 2px solid #d5f5e3;
+            padding-bottom: 10px;
+        }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 0;
+        border-color: #d5f5e3;
+        box-shadow: none;
+    }
+
+    .btn-primary {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+
+        .btn-primary:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+    .register-link {
+        display: block;
+        text-align: center;
+        color: #1abc9c;
+        font-size: 16px;
+        margin-top: 20px;
+        text-decoration: none;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 login-panel">
+            <h2>Login</h2>
+
+            @using (Html.BeginForm("Login", "User", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email)
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password)
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            }
+
+            <a href="@Url.Action("Create", "User")" class="register-link">Don't have an account? Register</a>
+        </div>
+    </div>
+</div>

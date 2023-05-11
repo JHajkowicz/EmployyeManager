@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Welcome to LeaveEase";
+}
+
+<style>
+    body {
+        background-color: #d5f5e3;
+        font-family: Arial, sans-serif;
+    }
+
+    .welcome-panel {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px #888888;
+        text-align: center;
+    }
+
+        .welcome-panel h1 {
+            font-size: 36px;
+            margin-bottom: 25px;
+        }
+
+        .welcome-panel p {
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+    .btn {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 0;
+        color: white;
+        text-decoration: none;
+    }
+
+        .btn:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+    .btn-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 30px;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 welcome-panel">
+            <h1 id="welcome-title">Welcome to LeaveEase</h1>
+            <div class="btn-container">
+                <a href="@Url.Action("Login", "User")" class="btn">Login</a>
+                <a href="@Url.Action("Create", "User")" class="btn">Register</a>
+            </div>
+            <p>LeaveEase is a comprehensive leave management system designed to simplify the process of tracking and approving employee leave requests. With an intuitive interface and powerful features, LeaveEase allows managers and employees to easily manage vacation days, sick leave, and other types of time off.</p>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            document.getElementById("welcome-title").style.opacity = 0;
+        }, 1000);
+        setTimeout(function() {
+            document.getElementById("welcome-title").innerHTML = "LeaveEase";
+            document.getElementById("welcome-title").style.opacity = 1;
+        }, 2000);
+    });
+</script>
+

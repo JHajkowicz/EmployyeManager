@@ -1,0 +1,234 @@
+﻿@model EmployyeManager.Models.CompanyViewModel
+@using EmployyeManager.Models
+@{
+    ViewBag.Title = "CompanyDetails";
+}
+@{
+    int currentUserId = (int)Session["UserId"];
+    bool hasValidRole = Model.CompanyEmployees
+                .Any(e => e.UserID == currentUserId && (e.RoleID == 1 || e.RoleID == 2));
+}
+<style>
+    body {
+        background-color: #d5f5e3;
+    }
+
+    h2 {
+        font-size: 28px;
+        margin-bottom: 25px;
+        text-align: center;
+        border-bottom: 2px solid #1abc9c;
+        padding-bottom: 10px;
+        color: black;
+    }
+
+    h4 {
+        font-size: 28px;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        color: black;
+    }
+
+    hr {
+        border-color: #1abc9c;
+        margin-top: 0px;
+        margin-bottom: 20px;
+        border-top: 2px solid #1abc9c;
+    }
+
+    .btn-primary {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px 20px;
+        margin-right: 10px;
+    }
+
+        .btn-primary:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+    .dl-horizontal dt {
+        font-weight: bold;
+    }
+
+    .dl-horizontal dd {
+        margin-left: 0;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: #1abc9c;
+    }
+
+    .form-control {
+        border-radius: 0;
+        border-color: #1abc9c;
+        box-shadow: none;
+    }
+
+    input[type="submit"] {
+        background-color: #1abc9c;
+        border-color: #1abc9c;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+
+        input[type="submit"]:hover {
+            background-color: #16a085;
+            border-color: #16a085;
+        }
+
+    .alert-danger {
+        background-color: #fbe8e6;
+        border-color: #f5c6cb;
+        color: #721c24;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+        background-color: white;
+    }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            line-height: 1.5;
+            vertical-align: top;
+            border-top: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            font-weight: bold;
+        }
+
+        .table td {
+            font-size: 16px;
+        }
+
+            .table td button {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+
+                .table td button.btn-danger {
+                    background-color: #e74c3c;
+                    border-color: #e74c3c;
+                }
+
+                    .table td button.btn-danger:hover {
+                        background-color: #c0392b;
+                        border-color: #c0392b;
+                    }
+
+                    .table td button.btn-danger:focus,
+                    .table td button.btn-danger.focus {
+                        outline: 5px auto -webkit-focus-ring-color;
+                        outline-offset: -2px;
+                    }
+
+    label[for="emailAddress"] {
+        color: black;
+    }
+</style>
+
+<h2>Company Details</h2>
+@if (hasValidRole)
+{
+    <a href="@Url.Action("ListCaseRequests", "CaseRequests", new { companyId = Model.CompanyID })" class="btn btn-primary">Requests</a>
+    <a href="@Url.Action("DisplayEmployeesLeaves", "CaseRequests", new { companyId = Model.CompanyID })" class="btn btn-primary">Display Leaves</a>
+}
+<a href="@Url.Action("RequestLeave", "CaseRequests", new { companyId = Model.CompanyID })" class="btn btn-primary">Request Leave</a>
+
+
+
+
+<h4>Company Details:</h4>
+<hr />
+<dl class="dl-horizontal">
+    <dt>Company Name:  </dt>
+    <dd>@Model.CompanyName</dd>
+    @if (hasValidRole)
+    {
+        <dt>Worker Amount:  </dt>
+        <dd>@Model.WorkerAmount</dd>
+    }
+</dl>
+
+@if (hasValidRole)
+{
+    <h2>Generate Invite Link</h2>
+    <form action="@Url.Action("GenerateInviteLink", "Company")" method="post">
+        @Html.HiddenFor(m => m.CompanyID)
+        <div class="form-group">
+            <label for="emailAddress">Email Address:</label>
+            <input type="email" name="emailAddress" id="emailAddress" class="form-control" />
+            @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+        </div>
+        <input type="submit" value="Generate Invite Link" class="btn btn-primary" />
+    </form>
+}
+
+<h4>Users:</h4>
+<hr />
+@if (Model.Users != null && Model.Users.Count > 0)
+{
+    <table class="table">
+        <tr>
+            <th>FirstName</th>
+            <th>Surname</th>
+            <th>Role</th>
+        </tr>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>
+                    @{
+                        var companyEmployee = Model.CompanyEmployees.FirstOrDefault(ce => ce.UserID == user.UserID);
+                        if (companyEmployee != null)
+                        {
+                            var role = Model.Roles.FirstOrDefault(r => r.RolesID == companyEmployee.RoleID);
+                            if (role != null)
+                            {
+                                @role.Rolename
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    @if (hasValidRole)
+                    {
+                        if ((int)Session["UserId"] != user.UserID)
+                        {
+                            <form action="@Url.Action("RemoveEmployeeFromCompany", "Company")" method="post" onsubmit="return confirm('Are you sure you want to remove this employee from the company?');">
+                                @Html.HiddenFor(m => m.CompanyID)
+                                @Html.Hidden("UserID", user.UserID)
+                                <input type="submit" value="Remove" class="btn btn-danger btn-sm" />
+                            </form>}
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>No users found.</p>
+}
+
+<p>
+    @Html.ActionLink("Back to Company List", "Index", null, new { @class = "btn btn-primary" })
+</p>
